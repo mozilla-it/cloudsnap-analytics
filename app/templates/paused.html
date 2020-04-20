@@ -1,24 +1,55 @@
 {% extends 'base.html' %}
+<style>
+    .filterable {
+    margin-top: 15px;
+}
+.filterable .panel-heading .pull-right {
+    margin-top: -20px;
+}
+.filterable .filters input[disabled] {
+    background-color: transparent;
+    border: none;
+    cursor: auto;
+    box-shadow: none;
+    padding: 0;
+    height: auto;
+}
+.filterable .filters input[disabled]::-webkit-input-placeholder {
+    color: #333;
+}
+.filterable .filters input[disabled]::-moz-placeholder {
+    color: #333;
+}
+.filterable .filters input[disabled]:-ms-input-placeholder {
+    color: #333;
+}
+</style>
 {% block content %}
-    <div class="container mt-3">
-        <h1>Cloudsnap Analytics</h1>
-        <input class="form-control" id="myInput" type="text" placeholder="Search Criteria"
-               onkeyup="console.log('search')">
-        <br>
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>Entity</th>
-                <th>Name</th>
-                <th>Timestamp</th>
-                <th>Url</th>
-                <th>Instance</th>
-                <th>Actions</th>
-                <th>Runbook</th>
-            </tr>
-            </thead>
-            <tbody id="myTable">
-            {% for paused_job in paused_jobs %}
+    <div class="container">
+    <h3>CloudSnap Paused Workflows</h3>
+    <hr>
+    <div class="row">
+        <div class="panel panel-primary filterable">
+            <div class="panel-heading">
+                <h3 class="panel-title">Paused Workflows</h3>
+                <div class="pull-right">
+                    <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr class="filters">
+                        <th><input type="text" class="form-control" placeholder="Entity" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Name" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Timestamp" disabled></th>
+                        <th>Url</th>
+                        <th>Instance</th>
+                        <th>Actions</th>
+                        <th>Runbook</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for paused_job in paused_jobs %}
                 <tr id="{{ paused_job.entity }}">
                     <td>{{ paused_job.entity }}</td>
                     <td>{{ paused_job.name }}</td>
@@ -55,9 +86,11 @@
                     </td>
                 </tr>
             {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
+</div>
     {% if paused_jobs.has_other_pages %}
         <ul class="pagination">
             {% if paused_jobs.has_previous %}

@@ -15,57 +15,19 @@ environment:
       - PYTHON: "C:\\Python27-x64"
         PYTHON_VERSION: "2.7.8"
         PYTHON_ARCH: "32"
-
 matrix:
     fast_finish: true
-
 install:
   - "powershell ./ci_scripts/appveyor/install.ps1"
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
   - "python -m pip install -U pip"
-
-  # Check that we have the expected version and architecture for Python
-  - "python --version"
-  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
-  - "pip --version"
-
   - "%CMD_IN_ENV% pip install --timeout=60 numpy pytest wheel"
   - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
-
   - ps: "ls dist"
-  #  # build the conda package
-  #  - "%CMD_IN_ENV% conda build build_tools/conda-recipe --quiet"
-  #
-  #  # Move the conda package into the dist directory, to register it
-  #  # as an "artifact" for Appveyor. cmd.exe does't have good globbing, so
-  #  # we'll use a simple python script.
-  #  - python build_tools/move-conda-package.py build_tools/conda-recipe
-  #
-  #  # Install the generated wheel package to test it
-  - "pip install --pre --no-index --find-links dist/ cloudsnap-analytics"
-
-# Not a .NET project, we build scikit-learn in the install step instead
 build: false
-
 test_script:
-  # Change to a non-source folder to make sure we run the tests on the
-  # installed library.
-  - "echo Running tests"
-  - "mkdir empty_folder"
-  - "cd empty_folder"
-
-  - "pytest -vs --pyargs ad3"
-
-  # Move back to the project folder
-  - "cd .."
-
-  - "echo Running examples"
-  - "set NOPLOT=1"
-  - "cd examples\\python"
-  - "for %%i in (*.py) do (python %%i || exit 1)"
-
+  - "tox"
 artifacts:
   - path: dist\*
-
 cache:
   - '%APPDATA%\pip\Cache'

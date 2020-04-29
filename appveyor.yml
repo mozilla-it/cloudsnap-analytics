@@ -42,7 +42,7 @@ install:
   #  - python build_tools/move-conda-package.py build_tools/conda-recipe
   #
   #  # Install the generated wheel package to test it
-  - "pip install --pre --no-index --find-links dist/ ad3"
+  - "pip install --pre --no-index --find-links dist/ cloudsnap-analytics"
 
 # Not a .NET project, we build scikit-learn in the install step instead
 build: false
@@ -65,7 +65,6 @@ test_script:
   - "for %%i in (*.py) do (python %%i || exit 1)"
 
 artifacts:
-  # Archive the generated wheel package in the ci.appveyor.com build report.
   - path: dist\*
 
 cache:

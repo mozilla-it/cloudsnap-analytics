@@ -21,7 +21,7 @@ install:
   - "powershell ./ci_scripts/appveyor/install.ps1"
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
   - "python -m pip install -U pip"
-  - "%CMD_IN_ENV% pip install --timeout=60 numpy pytest wheel"
+  - "%CMD_IN_ENV% pip install --timeout=60 tox pytest wheel"
   - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
   - ps: "ls dist"
 build: false

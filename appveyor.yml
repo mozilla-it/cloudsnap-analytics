@@ -31,7 +31,7 @@ install:
   # done from inside the powershell script as it would require to restart
   # the parent CMD process).
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
-
+  - path: "%PYTHON%\Scripts;%path%"
   # Upgrade to the latest version of pip to avoid it displaying warnings
   # about it being out of date.
   - "python.exe -m pip install --disable-pip-version-check --user --upgrade pip"

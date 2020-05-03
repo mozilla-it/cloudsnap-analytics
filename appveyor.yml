@@ -19,6 +19,7 @@ install:
   - "python -m pip install -U pip"
   - "%CMD_IN_ENV% pip install --timeout=60 tox pytest wheel"
   - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
+  - "%CMD_IN_ENV% python pyinstaller --onefile --add-data 'app/templates:templates' --add-data 'app/static:static' app/app.py
   - ps: "ls dist"
 build: false
 artifacts:

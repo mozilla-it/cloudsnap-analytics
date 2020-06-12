@@ -1,0 +1,28 @@
+# AppVeyor.com is a Continuous Integration service to build and run tests under
+# Windows
+environment:
+  global:
+    # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
+    # /E:ON and /V:ON options are not enabled in the batch script interpreter
+    # See: http://stackoverflow.com/a/13751649/163740
+    CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\ci_scripts\\appveyor\\run_with_env.cmd"
+
+  matrix:
+      - PYTHON: "C:\\Python37-x64"
+        PYTHON_VERSION: "3.7.0"
+        PYTHON_ARCH: "64"
+matrix:
+    fast_finish: true
+install:
+  - "powershell ./ci_scripts/appveyor/install.ps1"
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - "python -m pip install -U pip"
+  - "%CMD_IN_ENV% pip install --timeout=60 tox pytest wheel"
+  - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
+  - "%CMD_IN_ENV% python pyinstaller --onefile --add-data 'app/templates:templates' app/app.py
+  - ps: "ls dist"
+build: false
+artifacts:
+  - path: dist\*
+cache:
+  - '%APPDATA%\pip\Cache'

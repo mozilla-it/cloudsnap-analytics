@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import json
+import os
 import time
 
 import sqlalchemy
@@ -480,7 +481,8 @@ def create_driver(name="firefox", headless=True):
         options.headless = headless
         driver = webdriver.Firefox(
             options=options,
-            executable_path=GeckoDriverManager().install()
+            executable_path=GeckoDriverManager().install(),
+            log_path="/dev/null"
         )
         return driver
     else:
